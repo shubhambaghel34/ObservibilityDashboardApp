@@ -27,5 +27,48 @@
     { "title": "High queue depth", "severity": "critical", "detail": "billing-worker backlog above 5.2k events for 14 minutes." },
     { "title": "Cache revalidation lag", "severity": "warning", "detail": "Redis memory pressure reached 83% for the last 9 minutes." },
     { "title": "Traffic spike", "severity": "info", "detail": "API throughput increased 18% after the 13:00 deploy window." }
-  ]
+  ],
+  "useCases": [
+    {
+      "title": "E-commerce traffic bursts",
+      "tag": "Retail",
+      "description": "Track checkout and catalog API health during flash sales and campaign spikes without missing conversion bottlenecks.",
+      "metrics": "12.4k req/min • 0.26s p95",
+      "accent": "green"
+    },
+    {
+      "title": "SRE incident triage",
+      "tag": "Operations",
+      "description": "Correlate error budgets, latency spikes, and queue depth to isolate root cause in seconds during active incidents.",
+      "metrics": "4 alerts • 6 min MTTR",
+      "accent": "amber"
+    },
+    {
+      "title": "Platform reliability review",
+      "tag": "Platform",
+      "description": "Review CPU, memory, and dependency saturation trends before rolling forward major infrastructure changes.",
+      "metrics": "99.97% uptime • 63% memory",
+      "accent": "blue"
+    }
+  ],
+  "kubernetes": {
+    "pods": [
+      { "name": "api-gateway-66d7b4d7f9-r2x5k", "status": "Running", "ready": "1/1", "namespace": "prod" },
+      { "name": "checkout-api-6d8bc6db56-g6m9j", "status": "Running", "ready": "1/1", "namespace": "prod" },
+      { "name": "billing-worker-5c6dc7f85d-7v4xn", "status": "CrashLoopBackOff", "ready": "0/1", "namespace": "prod" },
+      { "name": "inventory-sync-58d9dfd69f-7m5cn", "status": "Running", "ready": "1/1", "namespace": "prod" }
+    ],
+    "replicas": [
+      { "name": "api-gateway", "desired": 3, "ready": 3, "available": 3 },
+      { "name": "checkout-api", "desired": 5, "ready": 5, "available": 5 },
+      { "name": "billing-worker", "desired": 3, "ready": 2, "available": 2 },
+      { "name": "inventory-sync", "desired": 2, "ready": 2, "available": 2 }
+    ],
+    "kubectl": [
+      { "command": "kubectl get pods -A", "description": "List all pods across namespaces." },
+      { "command": "kubectl get rs -A", "description": "Inspect replica sets and rollout state." },
+      { "command": "kubectl describe pod api-gateway-66d7b4d7f9-r2x5k -n prod", "description": "View pod details and events." }
+    ],
+    "docsUrl": "https://kubernetes.io/docs/reference/kubectl/"
+  }
 }
