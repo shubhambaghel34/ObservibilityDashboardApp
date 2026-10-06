@@ -1,0 +1,31 @@
+{
+  "title": "Production observability",
+  "cluster": "prod-us-east-1",
+  "window": "Last 24 hours",
+  "summary": [
+    { "label": "Request rate", "value": "1.24M", "change": "+12.4%", "status": "positive" },
+    { "label": "Error rate", "value": "0.38%", "change": "-0.11%", "status": "positive" },
+    { "label": "P95 latency", "value": "218ms", "change": "+18ms", "status": "warning" },
+    { "label": "Uptime", "value": "99.97%", "change": "+0.03%", "status": "positive" }
+  ],
+  "timeSeries": [
+    42, 48, 52, 58, 65, 71, 68, 74, 83, 96, 88, 92, 102, 108, 100, 116
+  ],
+  "labels": ["00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "23:59"],
+  "queries": [
+    { "label": "HTTP 5xx rate", "query": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) by (service)", "value": "0.38%" },
+    { "label": "CPU saturation", "query": "avg(rate(container_cpu_usage_seconds_total[5m])) by (instance)", "value": "54%" },
+    { "label": "Memory pressure", "query": "(1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)) * 100", "value": "63%" }
+  ],
+  "services": [
+    { "name": "edge-gateway", "status": "healthy", "latency": "128ms", "errorRate": "0.05%", "uptime": "99.99%" },
+    { "name": "checkout-api", "status": "warning", "latency": "214ms", "errorRate": "0.42%", "uptime": "99.91%" },
+    { "name": "inventory-sync", "status": "healthy", "latency": "186ms", "errorRate": "0.12%", "uptime": "99.98%" },
+    { "name": "billing-worker", "status": "critical", "latency": "319ms", "errorRate": "1.08%", "uptime": "99.42%" }
+  ],
+  "alerts": [
+    { "title": "High queue depth", "severity": "critical", "detail": "billing-worker backlog above 5.2k events for 14 minutes." },
+    { "title": "Cache revalidation lag", "severity": "warning", "detail": "Redis memory pressure reached 83% for the last 9 minutes." },
+    { "title": "Traffic spike", "severity": "info", "detail": "API throughput increased 18% after the 13:00 deploy window." }
+  ]
+}
