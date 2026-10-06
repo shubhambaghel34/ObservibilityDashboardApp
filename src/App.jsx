@@ -26,6 +26,36 @@ function App() {
 
   const renderOverview = () => (
     <>
+      <section className="utility-bar">
+        <div className="search-box">
+          <span className="search-icon">⌕</span>
+          <input type="text" value="Search services, pods, alerts" readOnly aria-label="Search services" />
+        </div>
+
+        <div className="filter-group">
+          <span className="filter-pill active">Production</span>
+          <span className="filter-pill">US-East-1</span>
+          <span className="filter-pill">15m</span>
+          <span className="filter-pill">Auto-refresh</span>
+        </div>
+      </section>
+
+      <section className="status-strip panel">
+        <div>
+          <p className="eyebrow">Health score</p>
+          <strong>98.7%</strong>
+        </div>
+        <div>
+          <p className="eyebrow">Deploy window</p>
+          <strong>13:00 UTC</strong>
+        </div>
+        <div>
+          <p className="eyebrow">SLO</p>
+          <strong>99.9%</strong>
+        </div>
+        <div className="status-pill success">All systems healthy</div>
+      </section>
+
       <section className="metrics-grid">
         {stats.summary.map((metric) => (
           <article key={metric.label} className="metric-card">
@@ -391,7 +421,7 @@ function App() {
           <div className="brand-mark">S</div>
           <div>
             <p className="eyebrow">Stack</p>
-            <h1>SignalFlow</h1>
+            <h1>PulseGrid</h1>
           </div>
         </div>
 
